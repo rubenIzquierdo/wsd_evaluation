@@ -47,7 +47,7 @@ optional arguments:
 
 Example of usage:
 ```shell
-python evaluate.py -gold manual_annotation -system ItMakesSense#WN-1.7.1 -i /example_files -o my_eval.txt
+python evaluate.py -gold manual_annotation -system ItMakesSense#WN-1.7.1 -i example_files -o my_eval.txt
 ```
 
 This will read and evaluate all the files under the folder `example_files`, considering the gold standard

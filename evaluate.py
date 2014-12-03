@@ -91,12 +91,6 @@ if __name__ == '__main__':
     
     list_filenames = glob.glob(args.input_folder+'/*')
     
-    
-    #list_filenames.append('example_files/text2.naf.annotated')
-    #list_filenames.append('example_files/text3.naf.annotated')
-    #list_filenames.append('example_files/text5.naf.annotated')
-    #list_filenames.append('example_files/text10.naf.annotated')
-    
     my_temp_folder = None
     for this_filename in list_filenames:
         my_temp_folder = extract_data_file(this_filename, args.label_gold, args.label_system, this_temp_folder = my_temp_folder)  #The temp folder will be created only once
