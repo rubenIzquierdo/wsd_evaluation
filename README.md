@@ -43,6 +43,7 @@ optional arguments:
   -i INPUT_FOLDER       Input folder where all the files are stored
   -o OUT_FD             File where to store the evaluation (default standard
                         output
+  -random               Use random heuristic for each token
 ```
 
 Example of usage:
@@ -52,7 +53,12 @@ python evaluate.py -gold manual_annotation -system ItMakesSense#WN-1.7.1 -i exam
 
 This will read and evaluate all the files under the folder `example_files`, considering the gold standard
 annotations those with label `manual_annotation` in the external references (and the same for the system
-annotations), and storing the result in the file `my_eval.txt`
+annotations), and storing the result in the file `my_eval.txt`.
+
+For a random selection you could use:
+```shell
+python evaluate.py -gold manual_annotation -system ItMakesSense#WN-1.7.1 -i example_files -o my_eval.txt -random
+```
 
 ##Contact##
 * Ruben Izquierdo

@@ -8,6 +8,7 @@ import argparse
 import glob
 import sys
 import os
+import random
 
 __this_folder__ = os.path.realpath(os.path.dirname(__file__))
 __gold_filename__ = 'gold'
@@ -26,7 +27,15 @@ def get_max_from_list(this_list):
             new_list.append((label, float(value)))
     return sorted(new_list, key=lambda t: -t[1])[0]
 
-def extract_data_file(filename, label_gold, label_system, this_temp_folder=None):
+def get_random_from_list(this_list):
+    if len(this_list) == 0:
+        return None, None
+    random.shuffle(this_list)
+    r = random.choice(this_list)
+    return r
+    
+
+def extract_data_file(filename, label_gold, label_system, this_temp_folder=None, get_random=False):
     if this_temp_folder is None:
         temp_folder = mkdtemp()
     else:
@@ -52,7 +61,11 @@ def extract_data_file(filename, label_gold, label_system, this_temp_folder=None)
             best_gold_label, best_gold_value = get_max_from_list(results_gold)
             fd_gold.write(filename+'\t'+term_id+'\t'+best_gold_label+'\n')
             
-            best_system_label, best_system_value = get_max_from_list(results_system)
+            if get_random:
+                 best_system_label, best_system_value = get_random_from_list(results_system)
+            else:
+                best_system_label, best_system_value = get_max_from_list(results_system)
+                
             if best_system_label is not None:
                 fd_system.write(filename+'\t'+term_id+'\t'+best_system_label+'\n')
     fd_gold.close()
@@ -85,6 +98,7 @@ if __name__ == '__main__':
     parser.add_argument('-s','-system', dest = 'label_system', help='Resource label of the system annotations in the external resource elements', required = True)
     parser.add_argument('-i', dest = 'input_folder', help='Input folder where all the files are stored', required = True)
     parser.add_argument('-o', dest= 'out_fd', type=argparse.FileType('w'), help='File where to store the evaluation (default standard output')
+    parser.add_argument('-random', dest='random', action='store_true', help='Use random heuristic for each token')
     
     args = parser.parse_args()
     
@@ -93,7 +107,7 @@ if __name__ == '__main__':
     
     my_temp_folder = None
     for this_filename in list_filenames:
-        my_temp_folder = extract_data_file(this_filename, args.label_gold, args.label_system, this_temp_folder = my_temp_folder)  #The temp folder will be created only once
+        my_temp_folder = extract_data_file(this_filename, args.label_gold, args.label_system, this_temp_folder = my_temp_folder, get_random=args.random)  #The temp folder will be created only once
     output = run_evaluation(my_temp_folder)
     rmtree(my_temp_folder)
     
